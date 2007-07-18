@@ -12,7 +12,7 @@ load_plugin_textdomain('alexking.org');
 
 function aksm_process_content($content) {
 	$macros = unserialize(get_option('aksm_macros'));
-	if (count($macros) > 0) {
+	if (is_array($macros) && count($macros) > 0) {
 		$find = array();
 		$replace = array();
 		foreach ($macros as $k => $v) {
