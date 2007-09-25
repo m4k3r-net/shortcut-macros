@@ -3,7 +3,7 @@
 Plugin Name: Shortcut Macros
 Plugin URI: http://alexking.org/projects/wordpress
 Description: Auto-expansion macros - for example to turn '##wp.org' into '&lt;a href=&quot;http://wordpress.org&quot;&gt;WordPress&lt;a&gt;'. <a href="options-general.php?page=shortcut-macros.php">Create and modify them here</a>.
-Version: 1.0
+Version: 1.1
 Author: Alex King
 Author URI: http://alexking.org
 */ 
