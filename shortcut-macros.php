@@ -3,7 +3,7 @@
 Plugin Name: Shortcut Macros
 Plugin URI: http://alexking.org/projects/wordpress
 Description: Auto-expansion macros - for example to turn '##wp.org' into '&lt;a href=&quot;http://wordpress.org&quot;&gt;WordPress&lt;a&gt;'. <a href="options-general.php?page=shortcut-macros.php">Create and modify them here</a>.
-Version: 1.1
+Version: 1.2
 Author: Alex King
 Author URI: http://alexking.org
 */ 
@@ -104,8 +104,25 @@ add_action('admin_menu', 'aksm_admin_menu');
 
 function aksm_admin_head() {
 	print('
-		<script type="text/javascript" src="'.get_bloginfo('wpurl').'/wp-admin/options-general.php?ak_action=aksm_js"></script>
+<script type="text/javascript" src="'.get_bloginfo('wpurl').'/wp-admin/options-general.php?ak_action=aksm_js"></script>
 	');
+	global $wp_version;
+	if (isset($wp_version) && version_compare($wp_version, '2.5', '>=')) {
+		print('
+<style type="text/css">
+fieldset.options {
+	border: 0;
+	padding: 10px;
+}
+fieldset.options p {
+	margin-bottom: 10px;
+}
+fieldset.options th {
+	text-align: left;
+}
+</style>
+		');
+	}
 }
 add_action('admin_head', 'aksm_admin_head');
 
