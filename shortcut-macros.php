@@ -2,13 +2,23 @@
 /*
 Plugin Name: Shortcut Macros
 Plugin URI: http://alexking.org/projects/wordpress
-Description: Auto-expansion macros - for example to turn '##wp.org' into '&lt;a href=&quot;http://wordpress.org&quot;&gt;WordPress&lt;a&gt;'. <a href="options-general.php?page=shortcut-macros.php">Create and modify them here</a>.
-Version: 1.2
+Description: Auto-expansion macros - for example to turn '##wp.org' into '&lt;a href=&quot;http://wordpress.org&quot;&gt;WordPress&lt;a&gt;'.
+Version: 1.3
 Author: Alex King
 Author URI: http://alexking.org
 */ 
 
-load_plugin_textdomain('alexking.org');
+load_plugin_textdomain('shortcut-macros');
+
+function aksm_plugin_action_links($links, $file) {
+	$plugin_file = basename(__FILE__);
+	if (basename($file) == $plugin_file) {
+		$settings_link = '<a href="options-general.php?page='.$plugin_file.'">'.__('Settings', 'link-harvest').'</a>';
+		array_unshift($links, $settings_link);
+	}
+	return $links;
+}
+add_filter('plugin_action_links', 'aksm_plugin_action_links', 10, 2);
 
 function aksm_process_content($content) {
 	$macros = unserialize(get_option('aksm_macros'));
@@ -35,14 +45,14 @@ function aksm_options_form() {
 	}
 	print('
 		<div class="wrap">
-			<h2>'.__('Shortcut Macros', 'alexking.org').'</h2>
+			<h2>'.__('Shortcut Macros', 'shortcut-macros').'</h2>
 			<form name="ak_shortcutmacros" action="'.get_bloginfo('wpurl').'/wp-admin/options-general.php" method="post" onsubmit="if (!aksm_enabled) { return false; }">
 				<input type="hidden" name="ak_action" value="update_aksm_settings" />
 				<fieldset class="options">
 					<table style="width: 100%;">
 						<thead>
-							<th>'.__('Macro', 'alexking.org').'</th>
-							<th>'.__('Replace With', 'alexking.org').'</th>
+							<th>'.__('Macro', 'shortcut-macros').'</th>
+							<th>'.__('Replace With', 'shortcut-macros').'</th>
 						</thead>
 						<tbody id="aksm_macros">
 	');
@@ -59,7 +69,7 @@ function aksm_options_form() {
 							<tr class="'.$class.'" id="aksm_'.$i.'">
 								<td>##<input type="text" name="aksm_k_'.$i.'" value="'.htmlspecialchars($k).'" size="15"  /></td>
 								<td><input type="text" name="aksm_v_'.$i.'" value="'.htmlspecialchars($v).'" size="70"  /></td>
-								<td><input type="button" onclick="void(document.getElementById(\'aksm_'.$i.'\').parentNode.removeChild(document.getElementById(\'aksm_'.$i.'\')));" value="X" /></td>
+								<td><input type="button" onclick="void(document.getElementById(\'aksm_'.$i.'\').parentNode.removeChild(document.getElementById(\'aksm_'.$i.'\')));" value="X" class="button" /></td>
 							</tr>
 			');
 			$i++;
@@ -75,7 +85,7 @@ function aksm_options_form() {
 							<tr class="'.$class.'" id="aksm_'.$i.'">
 								<td>##<input type="text" name="aksm_k_'.$i.'" value="" size="15"  /></td>
 								<td><input type="text" name="aksm_v_'.$i.'" value="" size="70"  /></td>
-								<td><input type="button" id="aksm_add_'.$i.'" onclick="void(aksm_add_macro(\''.($i + 1).'\'));" value="+" /><input type="button" id="aksm_del_'.$i.'" style="display: none;" onclick="void(document.getElementById(\'aksm_'.$i.'\').parentNode.removeChild(document.getElementById(\'aksm_'.$i.'\')));" value="X" /></td>
+								<td><input type="button" id="aksm_add_'.$i.'" onclick="void(aksm_add_macro(\''.($i + 1).'\'));" value="+" class="button" /><input type="button" id="aksm_del_'.$i.'" style="display: none;" onclick="void(document.getElementById(\'aksm_'.$i.'\').parentNode.removeChild(document.getElementById(\'aksm_'.$i.'\')));" value="X" class="button" /></td>
 							</tr>
 	');
 	print('
@@ -83,7 +93,7 @@ function aksm_options_form() {
 					</table>
 				</fieldset>
 				<p class="submit">
-					<input type="submit" name="submit_button" onclick="aksm_enabled = true;" value="'.__('Update Shortcut Macros', 'alexking.org').'" />
+					<input type="submit" name="submit_button" onclick="aksm_enabled = true;" value="'.__('Update Shortcut Macros', 'shortcut-macros').'" class="button-primary" />
 				</p>
 			</form>
 		</div>
@@ -92,8 +102,8 @@ function aksm_options_form() {
 function aksm_admin_menu() {
 	if (function_exists('add_options_page')) {
 		add_options_page(
-			__('Shortcut Macro Options', 'alexking.org')
-			, __('Macros', 'alexking.org')
+			__('Shortcut Macro Options', 'shortcut-macros')
+			, __('Macros', 'shortcut-macros')
 			, 10
 			, basename(__FILE__)
 			, 'aksm_options_form'
