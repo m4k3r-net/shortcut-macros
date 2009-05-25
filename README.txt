@@ -2,8 +2,8 @@
 Tags: shortcut, macro, macros, abbreviation, auto-complete
 Contributors: alexkingorg
 Requires at least: 2.0
-Tested up to: 2.5
-Stable tag: 1.2
+Tested up to: 2.7.1
+Stable tag: 1.3
 
 The Shortcut Macros plugin allows you to set up a shortcut for text or links that you use often - saves typing.
 
